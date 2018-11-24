@@ -171,6 +171,7 @@ public class MainFragment extends Fragment {
 
                     markerOptions.setPosition(new LatLng(place.getLatLng().latitude,place.getLatLng().longitude));
                     mStartMarker = mMap.addMarker(markerOptions);
+                    mStartMarker.setTitle(place.getAddress().toString());
                     mStartMarkerOptions = markerOptions;
                 } else {
                     mStartMarker.setPosition(new LatLng(place.getLatLng().latitude,place.getLatLng().longitude));
@@ -203,6 +204,7 @@ public class MainFragment extends Fragment {
 
                     markerOptions.setPosition(new LatLng(place.getLatLng().latitude,place.getLatLng().longitude));
                     mDestinationMarker = mMap.addMarker(markerOptions);
+                    mDestinationMarker.setTitle(place.getAddress().toString());
                     mDestinationMarkerOptions = markerOptions;
 
 
@@ -223,11 +225,35 @@ public class MainFragment extends Fragment {
         btnFindway.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Toast.makeText(getContext(), "hello", Toast.LENGTH_SHORT).show();
-//                if(arrive.isEmpty() && current.isEmpty()){
-//                    Intent intent = new Intent(getActivity(), WaysActivity.class);
-//                    startActivity(intent);
-//                }
+                if(mStartMarker==null && mDestinationMarker==null)
+                    return;
+                if (mStartMarker == null) {
+                    Bundle bundle = new Bundle();
+                    bundle.putDouble("lat1", mOriginMarker.getPosition().getLatitude());
+                    bundle.putDouble("long1", mOriginMarker.getPosition().getLongitude());
+                    bundle.putString("name1","Current location");
+
+                    bundle.putDouble("lat2", mDestinationMarker.getPosition().getLatitude());
+                    bundle.putDouble("long2", mDestinationMarker.getPosition().getLongitude());
+                    bundle.putString("name2",mDestinationMarker.getTitle());
+
+                    Intent intent = new Intent(getActivity(), WaysActivity.class);
+                    intent.putExtra("coordinate", bundle);
+                    startActivity(intent);
+                } else {
+                    Bundle bundle = new Bundle();
+                    bundle.putDouble("lat1", mStartMarker.getPosition().getLatitude());
+                    bundle.putDouble("long1", mStartMarker.getPosition().getLongitude());
+                    bundle.putString("name1",mStartMarker.getTitle());
+
+                    bundle.putDouble("lat2", mDestinationMarker.getPosition().getLatitude());
+                    bundle.putDouble("long2", mDestinationMarker.getPosition().getLongitude());
+                    bundle.putString("name2",mDestinationMarker.getTitle());
+
+                    Intent intent = new Intent(getActivity(), WaysActivity.class);
+                    intent.putExtra("coordinate", bundle);
+                    startActivity(intent);
+                }
             }
         });
 

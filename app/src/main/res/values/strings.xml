@@ -7,4 +7,6 @@
     <string name="currentAdress">Current</string>
     <string name="arrive_adress">Arrive address</string>
     <string name="find_way">Find way</string>
+    <string name="suggest_transport">Suggested Routes</string>
+    <string name="bus_only_routes">Bus Only Routes</string>
 </resources>
