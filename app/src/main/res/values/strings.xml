@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SDKTemplateApp</string>
+    <string name="app_name">Easy Transport</string>
 
     <string name="depart_taxi">Depart Taxi</string>
     <string name="board_taxi">Board Taxi</string>

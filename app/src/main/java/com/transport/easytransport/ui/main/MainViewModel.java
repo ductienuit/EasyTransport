@@ -1,12 +1,12 @@
-package com.whereismytransport.sdktemplateapp.ui.main;
+package com.transport.easytransport.ui.main;
 
 import android.content.Context;
 import android.location.Location;
 
 import com.mapbox.mapboxsdk.geometry.LatLng;
-import com.whereismytransport.sdktemplateapp.LocationService;
-import com.whereismytransport.sdktemplateapp.R;
-import com.whereismytransport.sdktemplateapp.SDKTemplateApplication;
+import com.transport.easytransport.LocationService;
+import com.transport.easytransport.R;
+import com.transport.easytransport.SDKApplication;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,8 +80,8 @@ public final class MainViewModel extends ViewModel {
         mExecutor.execute(new Runnable() {
             @Override
             public void run() {
-                String clientId = SDKTemplateApplication.getContext().getString(R.string.transportApiClientId);
-                String clientSecret = SDKTemplateApplication.getContext().getString(R.string.transportApiClientSecret);
+                String clientId = SDKApplication.getContext().getString(R.string.transportApiClientId);
+                String clientSecret = SDKApplication.getContext().getString(R.string.transportApiClientSecret);
 
                 TransportApiClient tapiClient = new TransportApiClient(new TransportApiClientSettings(clientId, clientSecret));
 

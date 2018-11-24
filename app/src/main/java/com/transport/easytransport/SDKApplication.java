@@ -1,9 +1,9 @@
-package com.whereismytransport.sdktemplateapp;
+package com.transport.easytransport;
 
 import android.app.Application;
 import android.content.Context;
 
-public class SDKTemplateApplication extends Application {
+public class SDKApplication extends Application {
 
     private static Context context;
 

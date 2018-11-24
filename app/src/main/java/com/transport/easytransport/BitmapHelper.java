@@ -1,4 +1,4 @@
-package com.whereismytransport.sdktemplateapp;
+package com.transport.easytransport;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -6,11 +6,13 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 
 import com.mapbox.mapboxsdk.annotations.Icon;
 import com.mapbox.mapboxsdk.annotations.IconFactory;
 
 import androidx.annotation.ColorInt;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 
@@ -18,7 +20,12 @@ public final class BitmapHelper {
 
     public static Bitmap getVectorAsBitmap(Context context, int vectorDrawableId, int widthPixels, int heightPixels) {
 
-        Drawable drawable = VectorDrawableCompat.create(context.getResources(), vectorDrawableId, context.getTheme());
+        //Drawable drawable = VectorDrawableCompat.create(context.getResources(), vectorDrawableId, context.getTheme());
+
+        Drawable drawable = ContextCompat.getDrawable(context, vectorDrawableId);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            drawable = (DrawableCompat.wrap(drawable)).mutate();
+        }
 
         drawable.setBounds(0, 0, widthPixels, heightPixels);
 

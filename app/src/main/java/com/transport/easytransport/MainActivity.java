@@ -1,13 +1,12 @@
-package com.whereismytransport.sdktemplateapp;
+package com.transport.easytransport;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.os.Bundle;
 
-import com.mapbox.mapboxsdk.Mapbox;
-import com.whereismytransport.sdktemplateapp.ui.main.MainFragment;
-import com.whereismytransport.sdktemplateapp.ui.main.MainViewModel;
+import com.transport.easytransport.ui.main.MainFragment;
+import com.transport.easytransport.ui.main.MainViewModel;
 
 public class MainActivity extends AppCompatActivity {
 

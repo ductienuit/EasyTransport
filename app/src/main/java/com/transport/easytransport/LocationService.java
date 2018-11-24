@@ -1,4 +1,4 @@
-package com.whereismytransport.sdktemplateapp;
+package com.transport.easytransport;
 
 import android.content.Context;
 import android.location.Location;

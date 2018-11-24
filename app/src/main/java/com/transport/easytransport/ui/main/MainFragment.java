@@ -1,4 +1,4 @@
-package com.whereismytransport.sdktemplateapp.ui.main;
+package com.transport.easytransport.ui.main;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -35,9 +35,9 @@ import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
-import com.whereismytransport.sdktemplateapp.BitmapHelper;
-import com.whereismytransport.sdktemplateapp.MapboxHelper;
-import com.whereismytransport.sdktemplateapp.R;
+import com.transport.easytransport.BitmapHelper;
+import com.transport.easytransport.MapboxHelper;
+import com.transport.easytransport.R;
 
 import java.util.List;
 
@@ -142,7 +142,9 @@ public class MainFragment extends Fragment {
                     final int markerWidth = getContext().getResources().getDimensionPixelSize(R.dimen.waypoint_end_map_marker_width);
                     final int markerHeight = getContext().getResources().getDimensionPixelSize(R.dimen.waypoint_end_map_marker_height);
 
-                    Icon icon = BitmapHelper.getVectorAsMapBoxIcon(getContext(), R.drawable.ic_map_pin_a, markerWidth, markerHeight);
+                   // Icon icon = BitmapHelper.getVectorAsMapBoxIcon(getContext(), R.drawable.ic_map_pin_a, markerWidth, markerHeight);
+                    Icon icon = BitmapHelper.getVectorAsMapBoxIcon(getContext(), R.drawable.maker, markerWidth, markerHeight);
+
                     MarkerOptions markerOptions = new MarkerOptions();
                     markerOptions.setIcon(icon);
 
@@ -169,7 +171,7 @@ public class MainFragment extends Fragment {
                     final int markerWidth = getContext().getResources().getDimensionPixelSize(R.dimen.waypoint_end_map_marker_width);
                     final int markerHeight = getContext().getResources().getDimensionPixelSize(R.dimen.waypoint_end_map_marker_height);
 
-                    Icon icon = BitmapHelper.getVectorAsMapBoxIcon(getContext(), R.drawable.ic_map_pin_b, markerWidth, markerHeight);
+                    Icon icon = BitmapHelper.getVectorAsMapBoxIcon(getContext(), R.drawable.maker, markerWidth, markerHeight);
                     MarkerOptions markerOptions = new MarkerOptions();
                     markerOptions.setIcon(icon);
                     markerOptions.setPosition(location);
