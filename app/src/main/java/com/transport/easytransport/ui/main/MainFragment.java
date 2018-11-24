@@ -11,6 +11,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
@@ -30,6 +31,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
@@ -106,6 +108,20 @@ public class MainFragment extends Fragment {
             }
         });
 
+        FloatingActionButton btnSearch = view.findViewById(R.id.searchStation);
+        btnSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //IMPLETEMENT SEARCH
+                Toast.makeText(getContext(), "SEARCH STATION", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+
+
+
+
         txtCurrent = (PlaceAutocompleteFragment)
                 getActivity().getFragmentManager().findFragmentById(R.id.txtcurrent);
         txtCurrent.setHint("Current location");
@@ -151,6 +167,8 @@ public class MainFragment extends Fragment {
             public void onPlaceSelected(Place place) {
                 // TODO: Get info about the selected place.
                 Log.i(TAG, "Place: " + place.getName());
+                Bundle bundle = new Bundle();
+                bundle.
             }
 
             @Override
@@ -164,13 +182,13 @@ public class MainFragment extends Fragment {
         btnFindway.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getContext(), "hello", Toast.LENGTH_SHORT).show();
-                String arrive = txtArrive.getText().toString();
-                String current = txtCurrent.getText().toString();
-                if(arrive.isEmpty() && current.isEmpty()){
-                    Intent intent = new Intent(getActivity(), WaysActivity.class);
-                    startActivity(intent);
-                }
+//                Toast.makeText(getContext(), "hello", Toast.LENGTH_SHORT).show();
+//                String arrive = txtArrive.getText().toString();
+//                String current = txtCurrent.getText().toString();
+//                if(arrive.isEmpty() && current.isEmpty()){
+//                    Intent intent = new Intent(getActivity(), WaysActivity.class);
+//                    startActivity(intent);
+//                }
             }
         });
 

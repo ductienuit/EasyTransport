@@ -9,11 +9,12 @@
     tools:context=".ui.main.MainFragment">
 
 
-
     <com.mapbox.mapboxsdk.maps.MapView
         android:id="@+id/mapView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
         mapbox:mapbox_styleUrl="mapbox://styles/mapbox/streets-v10" />
 
     <RelativeLayout
@@ -47,7 +48,7 @@
                         <fragment
                             android:id="@+id/txtcurrent"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="35dp"
                             android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
                             />
                     </LinearLayout>
@@ -64,7 +65,7 @@
                     <fragment
                         android:id="@+id/txtarrive"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="35dp"
                         android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
                         />
                 </androidx.cardview.widget.CardView>
@@ -80,7 +81,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="130dp"
+        android:layout_marginTop="90dp"
         app:cardBackgroundColor="#87c94a"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
@@ -113,15 +114,25 @@
         </RelativeLayout>
 
     </androidx.cardview.widget.CardView>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/searchStation"
+        style="@style/Widget.MaterialComponents.FloatingActionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/centerLocationButton"
+        android:layout_marginBottom="82dp"
+        app:srcCompat="@drawable/ic_search_black_24dp" />
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/centerLocationButton"
-        style="@style/Widget.MaterialComponents.FloatingActionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_marginBottom="16dp"
         android:layout_marginEnd="16dp"
-        app:srcCompat="@drawable/ic_my_location_black_24dp" />
+        mapbox:srcCompat="@drawable/ic_my_location_black_24dp" />
 
 </RelativeLayout>
