@@ -21,6 +21,7 @@ import transportapisdk.models.Itinerary;
 
 import android.os.Vibrator;
 import android.provider.Settings;
+import android.text.Editable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,7 +42,9 @@ import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.transport.easytransport.BitmapHelper;
 import com.transport.easytransport.MapboxHelper;
 import com.transport.easytransport.R;
+import com.transport.easytransport.ui.WaysActivity;
 
+import java.nio.file.WatchService;
 import java.util.List;
 
 public class MainFragment extends Fragment {
@@ -116,6 +119,12 @@ public class MainFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Toast.makeText(getContext(), "hello", Toast.LENGTH_SHORT).show();
+                String arrive = txtArrive.getText().toString();
+                String current = txtCurrent.getText().toString();
+                if(arrive.isEmpty() && current.isEmpty()){
+                    Intent intent = new Intent(getActivity(), WaysActivity.class);
+                    startActivity(intent);
+                }
             }
         });
 

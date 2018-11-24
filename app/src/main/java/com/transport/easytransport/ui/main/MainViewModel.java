@@ -2,6 +2,8 @@ package com.transport.easytransport.ui.main;
 
 import android.content.Context;
 import android.location.Location;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.transport.easytransport.LocationService;
@@ -18,17 +20,20 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import transportapisdk.JourneyBodyOptions;
+import transportapisdk.StopQueryOptions;
 import transportapisdk.TransportApiClient;
 import transportapisdk.TransportApiClientSettings;
 import transportapisdk.TransportApiResult;
 import transportapisdk.models.Itinerary;
 import transportapisdk.models.Journey;
+import transportapisdk.models.Stop;
 
 public final class MainViewModel extends ViewModel {
 
     private final Executor mExecutor = Executors.newSingleThreadExecutor();
 
     private boolean startLocationSet;
+
     private MutableLiveData<Location> mStartLocationLiveData = new MutableLiveData<>();
 
     private MutableLiveData<LatLng> mEndLocationLiveData = new MutableLiveData<>();
@@ -92,23 +97,23 @@ public final class MainViewModel extends ViewModel {
 
                 // Let's restrict our Journey call to only some Modes.
                 List<String> onlyModes = new ArrayList<>();
-                onlyModes.add("ShareTaxi");
+                //onlyModes.add("ShareTaxi");
                 onlyModes.add("Bus");
-                onlyModes.add("Rail");
+                //onlyModes.add("Rail");
                 // onlyModes.add("Ferry");
                 // onlyModes.add("Coach");
                 // onlyModes.add("Subway");
                 // onlyModes.add("Rail");
 
                 // Request only one Itinerary for now.
-                int numItineraries = 1;
+                int numItineraries = 5;
 
                 JourneyBodyOptions journeyBodyOptions = new JourneyBodyOptions(
                         null,
                         null,
-                        onlyModes,
+                        onlyModes,  // Đường đi bằng gì
                         null,
-                        numItineraries,
+                        numItineraries, //Số đường chỉ dẫn ra
                         null);
 
                 TransportApiResult<Journey> journeyResult = tapiClient.postJourney(
@@ -118,6 +123,12 @@ public final class MainViewModel extends ViewModel {
                         endLatitude,
                         endLongitude,
                         null);
+
+
+                ///STOPS REQUEST
+//                StopQueryOptions stopQuery = StopQueryOptions.defaultQueryOptions();
+//                TransportApiResult<List<Stop>> getStopsNearby = tapiClient.getStopsNearby(stopQuery,10.752070,106.663795,100);
+//                Log.i("HRLLLLLLL", "ádjlk");
 
                 List<Itinerary> itineraries = journeyResult.data.getItineraries();
 
