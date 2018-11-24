@@ -3,6 +3,7 @@ package com.transport.easytransport.ui.main;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -27,6 +28,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
+import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.annotations.Icon;
@@ -42,6 +47,8 @@ import com.transport.easytransport.MapboxHelper;
 import com.transport.easytransport.R;
 
 import java.util.List;
+
+import static androidx.constraintlayout.motion.widget.MotionScene.TAG;
 
 public class MainFragment extends Fragment {
     private static final String LOG_TAG = "MainFragment";
@@ -99,7 +106,23 @@ public class MainFragment extends Fragment {
         txtCurrent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
+                        getActivity().getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
 
+
+                autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+                    @Override
+                    public void onPlaceSelected(Place place) {
+                        // TODO: Get info about the selected place.
+                        Log.i(TAG, "Place: " + place.getName());
+                    }
+
+                    @Override
+                    public void onError(Status status) {
+                        // TODO: Handle the error.
+                        Log.i(TAG, "An error occurred: " + status);
+                    }
+                });
             }
         });
 
@@ -114,8 +137,23 @@ public class MainFragment extends Fragment {
         btnFindway.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getActivity(),AutoCompleteActivity.class);
-                startActivity(intent);
+                PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
+                        getActivity().getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
+
+
+                autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+                    @Override
+                    public void onPlaceSelected(Place place) {
+                        // TODO: Get info about the selected place.
+                        Log.i(TAG, "Place: " + place.getName());
+                    }
+
+                    @Override
+                    public void onError(Status status) {
+                        // TODO: Handle the error.
+                        Log.i(TAG, "An error occurred: " + status);
+                    }
+                });
             }
         });
 
