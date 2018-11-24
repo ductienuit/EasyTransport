@@ -71,12 +71,6 @@ public class WaysActivity extends Activity {
                         endLongitude,
                         null);
 
-
-                ///STOPS REQUEST
-//                StopQueryOptions stopQuery = StopQueryOptions.defaultQueryOptions();
-//                TransportApiResult<List<Stop>> getStopsNearby = tapiClient.getStopsNearby(stopQuery,10.752070,106.663795,100);
-//                Log.i("HRLLLLLLL", "ádjlk");
-
                 List<Itinerary> itineraries = journeyResult.data.getItineraries();
 
                 //mItinerariesLiveData.postValue(itineraries);

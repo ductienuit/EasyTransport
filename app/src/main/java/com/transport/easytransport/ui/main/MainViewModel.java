@@ -71,6 +71,10 @@ public final class MainViewModel extends ViewModel {
         return mLocationLiveData;
     }
 
+    public void stopLocationService(){
+        LocationService.getInstance().endLocationUpdates();
+    }
+
     public LiveData<Location> getStartLocation() {
         return mStartLocationLiveData;
     }
@@ -135,6 +139,10 @@ public final class MainViewModel extends ViewModel {
                 mItinerariesLiveData.postValue(itineraries);
             }
         });
+    }
+
+    public void setStartLocation(Location location){
+        mStartLocationLiveData.postValue(location);
     }
 
     public LiveData<List<Itinerary>> getItineraries() {

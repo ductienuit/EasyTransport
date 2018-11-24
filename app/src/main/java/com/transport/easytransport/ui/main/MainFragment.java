@@ -35,6 +35,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.internal.PlaceEntity;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -73,11 +74,14 @@ public class MainFragment extends Fragment {
     private PlaceAutocompleteFragment txtCurrent;
     private PlaceAutocompleteFragment txtArrive;
 
-    private MarkerOptions mOriginMarkerOptions;
+    private MarkerOptions mOriginMarkerOptions; //GPS
     private Marker mOriginMarker;
 
     private MarkerOptions mDestinationMarkerOptions;
     private Marker mDestinationMarker;
+
+    private MarkerOptions mStartMarkerOptions;  //User typing
+    private Marker mStartMarker;
 
     public static MainFragment newInstance() {
         return new MainFragment();
@@ -101,7 +105,7 @@ public class MainFragment extends Fragment {
                 if (mOriginMarker != null) {
                     CameraPosition.Builder camPositionBuilder = new CameraPosition.Builder();
                     camPositionBuilder.target(mOriginMarker.getPosition());
-                    camPositionBuilder.zoom(12.0);
+                    camPositionBuilder.zoom(14.0);
 
                     mMap.setCameraPosition(camPositionBuilder.build());
                 }
@@ -117,11 +121,6 @@ public class MainFragment extends Fragment {
             }
         });
 
-
-
-
-
-
         txtCurrent = (PlaceAutocompleteFragment)
                 getActivity().getFragmentManager().findFragmentById(R.id.txtcurrent);
         txtCurrent.setHint("Current location");
@@ -131,11 +130,19 @@ public class MainFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if (mOriginMarker != null) {
-                    CameraPosition.Builder camPositionBuilder = new CameraPosition.Builder();
-                    camPositionBuilder.target(mOriginMarker.getPosition());
-                    camPositionBuilder.zoom(12.0);
+                        setupViewModelConnections();
 
-                    mMap.setCameraPosition(camPositionBuilder.build());
+                        CameraPosition.Builder camPositionBuilder = new CameraPosition.Builder();
+                        camPositionBuilder.target(mOriginMarker.getPosition());
+                        camPositionBuilder.zoom(14.0);
+
+                        mMap.setCameraPosition(camPositionBuilder.build());
+
+                        txtCurrent.setText("");
+
+                        mMap.clear();
+
+                        mStartMarker=null;
                 }
             }
         });
@@ -152,6 +159,23 @@ public class MainFragment extends Fragment {
             public void onPlaceSelected(Place place) {
                 // TODO: Get info about the selected place.
                 Log.i(TAG, "Place: " + place.getName());
+                if (mStartMarker == null) {
+                    final int markerWidth = getContext().getResources().getDimensionPixelSize(R.dimen.waypoint_end_map_marker_width);
+                    final int markerHeight = getContext().getResources().getDimensionPixelSize(R.dimen.waypoint_end_map_marker_height);
+
+                    // Icon icon = BitmapHelper.getVectorAsMapBoxIcon(getContext(), R.drawable.ic_map_pin_a, markerWidth, markerHeight);
+                    Icon icon = BitmapHelper.getVectorAsMapBoxIcon(getContext(), R.drawable.maker, markerWidth, markerHeight);
+
+                    MarkerOptions markerOptions = new MarkerOptions();
+                    markerOptions.setIcon(icon);
+
+                    markerOptions.setPosition(new LatLng(place.getLatLng().latitude,place.getLatLng().longitude));
+                    mStartMarker = mMap.addMarker(markerOptions);
+                    mStartMarkerOptions = markerOptions;
+                } else {
+                    mStartMarker.setPosition(new LatLng(place.getLatLng().latitude,place.getLatLng().longitude));
+                    mStartMarkerOptions.setPosition(new LatLng(place.getLatLng().latitude,place.getLatLng().longitude));
+                }
             }
 
             @Override
@@ -167,8 +191,25 @@ public class MainFragment extends Fragment {
             public void onPlaceSelected(Place place) {
                 // TODO: Get info about the selected place.
                 Log.i(TAG, "Place: " + place.getName());
-                Bundle bundle = new Bundle();
-                bundle.
+                if (mDestinationMarker == null) {
+                    final int markerWidth = getContext().getResources().getDimensionPixelSize(R.dimen.waypoint_end_map_marker_width);
+                    final int markerHeight = getContext().getResources().getDimensionPixelSize(R.dimen.waypoint_end_map_marker_height);
+
+                    // Icon icon = BitmapHelper.getVectorAsMapBoxIcon(getContext(), R.drawable.ic_map_pin_a, markerWidth, markerHeight);
+                    Icon icon = BitmapHelper.getVectorAsMapBoxIcon(getContext(), R.drawable.maker, markerWidth, markerHeight);
+
+                    MarkerOptions markerOptions = new MarkerOptions();
+                    markerOptions.setIcon(icon);
+
+                    markerOptions.setPosition(new LatLng(place.getLatLng().latitude,place.getLatLng().longitude));
+                    mDestinationMarker = mMap.addMarker(markerOptions);
+                    mDestinationMarkerOptions = markerOptions;
+
+
+                } else {
+                    mDestinationMarker.setPosition(new LatLng(place.getLatLng().latitude,place.getLatLng().longitude));
+                    mDestinationMarkerOptions.setPosition(new LatLng(place.getLatLng().latitude,place.getLatLng().longitude));
+                }
             }
 
             @Override
@@ -183,8 +224,6 @@ public class MainFragment extends Fragment {
             @Override
             public void onClick(View view) {
 //                Toast.makeText(getContext(), "hello", Toast.LENGTH_SHORT).show();
-//                String arrive = txtArrive.getText().toString();
-//                String current = txtCurrent.getText().toString();
 //                if(arrive.isEmpty() && current.isEmpty()){
 //                    Intent intent = new Intent(getActivity(), WaysActivity.class);
 //                    startActivity(intent);
@@ -237,6 +276,7 @@ public class MainFragment extends Fragment {
             @Override
             public void onChanged(Location location) {
                 Log.i(LOG_TAG, "Location update!");
+
             }
         });
 
@@ -244,11 +284,11 @@ public class MainFragment extends Fragment {
             @Override
             public void onChanged(Location location) {
                 if (mOriginMarker == null) {
-                    final int markerWidth = getContext().getResources().getDimensionPixelSize(R.dimen.waypoint_end_map_marker_width);
-                    final int markerHeight = getContext().getResources().getDimensionPixelSize(R.dimen.waypoint_end_map_marker_height);
+                    final int markerWidth = getContext().getResources().getDimensionPixelSize(R.dimen.waypoint_user_location_marker_height);
+                    final int markerHeight = getContext().getResources().getDimensionPixelSize(R.dimen.waypoint_user_location_marker_width);
 
                     // Icon icon = BitmapHelper.getVectorAsMapBoxIcon(getContext(), R.drawable.ic_map_pin_a, markerWidth, markerHeight);
-                    Icon icon = BitmapHelper.getVectorAsMapBoxIcon(getContext(), R.drawable.maker, markerWidth, markerHeight);
+                    Icon icon = BitmapHelper.getVectorAsMapBoxIcon(getContext(), R.drawable.ic_user_location, markerWidth, markerHeight);
 
                     MarkerOptions markerOptions = new MarkerOptions();
                     markerOptions.setIcon(icon);
@@ -263,9 +303,11 @@ public class MainFragment extends Fragment {
 
                 CameraPosition.Builder camPositionBuilder = new CameraPosition.Builder();
                 camPositionBuilder.target(mOriginMarker.getPosition());
-                camPositionBuilder.zoom(12.0);
+                camPositionBuilder.zoom(13.0);
 
                 mMap.setCameraPosition(camPositionBuilder.build());
+
+                Toast.makeText(getContext(), "Location update", Toast.LENGTH_SHORT).show();
             }
         });
 
