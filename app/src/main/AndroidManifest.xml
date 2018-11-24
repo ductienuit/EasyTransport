@@ -24,6 +24,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.WaysActivity"></activity>
+        <activity android:name=".ui.main.AutoCompleteActivity"></activity>
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBAGOnN-kkH26IFRwjFrciJ2LV4g0U8_eQ" />
     </application>
 
 </manifest>

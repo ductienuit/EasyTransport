@@ -3,6 +3,7 @@ package com.transport.easytransport.ui.main;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -27,8 +28,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.Toast;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
+import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.annotations.Icon;
@@ -46,6 +52,9 @@ import com.transport.easytransport.ui.WaysActivity;
 
 import java.nio.file.WatchService;
 import java.util.List;
+import java.util.Objects;
+
+import static androidx.constraintlayout.motion.widget.MotionScene.TAG;
 
 public class MainFragment extends Fragment {
     private static final String LOG_TAG = "MainFragment";
@@ -59,8 +68,8 @@ public class MainFragment extends Fragment {
 
     private FloatingActionButton mCenterLocationButton;
 
-    private EditText txtCurrent;
-    private EditText txtArrive;
+    private PlaceAutocompleteFragment txtCurrent;
+    private PlaceAutocompleteFragment txtArrive;
 
     private MarkerOptions mOriginMarkerOptions;
     private Marker mOriginMarker;
@@ -97,20 +106,57 @@ public class MainFragment extends Fragment {
             }
         });
 
-        txtCurrent = view.findViewById(R.id.txtcurrent);
-        txtArrive = view.findViewById(R.id.txtarrive);
-
-        txtCurrent.setOnClickListener(new View.OnClickListener() {
+        txtCurrent = (PlaceAutocompleteFragment)
+                getActivity().getFragmentManager().findFragmentById(R.id.txtcurrent);
+        txtCurrent.setHint("Current location");
+        ImageView searchCurrentIcon = (ImageView)((LinearLayout) Objects.requireNonNull(txtCurrent.getView())).getChildAt(0);
+        searchCurrentIcon.setImageDrawable(getResources().getDrawable(R.drawable.ic_my_location_black_24dp));
+        searchCurrentIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (mOriginMarker != null) {
+                    CameraPosition.Builder camPositionBuilder = new CameraPosition.Builder();
+                    camPositionBuilder.target(mOriginMarker.getPosition());
+                    camPositionBuilder.zoom(12.0);
 
+                    mMap.setCameraPosition(camPositionBuilder.build());
+                }
             }
         });
 
-        txtArrive.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        txtArrive = (PlaceAutocompleteFragment)
+                getActivity().getFragmentManager().findFragmentById(R.id.txtarrive);
+        txtArrive.setHint("Arrive address");
+        ImageView searchArriveIcon = (ImageView)((LinearLayout) Objects.requireNonNull(txtArrive.getView())).getChildAt(0);
+        searchArriveIcon.setImageDrawable(getResources().getDrawable(R.drawable.ic_subdirectory_arrow_right_black_24dp));
 
+
+        txtCurrent.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(Place place) {
+                // TODO: Get info about the selected place.
+                Log.i(TAG, "Place: " + place.getName());
+            }
+
+            @Override
+            public void onError(Status status) {
+                // TODO: Handle the error.
+                Log.i(TAG, "An error occurred: " + status);
+            }
+        });
+
+
+        txtArrive.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(Place place) {
+                // TODO: Get info about the selected place.
+                Log.i(TAG, "Place: " + place.getName());
+            }
+
+            @Override
+            public void onError(Status status) {
+                // TODO: Handle the error.
+                Log.i(TAG, "An error occurred: " + status);
             }
         });
 
@@ -183,7 +229,7 @@ public class MainFragment extends Fragment {
                     final int markerWidth = getContext().getResources().getDimensionPixelSize(R.dimen.waypoint_end_map_marker_width);
                     final int markerHeight = getContext().getResources().getDimensionPixelSize(R.dimen.waypoint_end_map_marker_height);
 
-                   // Icon icon = BitmapHelper.getVectorAsMapBoxIcon(getContext(), R.drawable.ic_map_pin_a, markerWidth, markerHeight);
+                    // Icon icon = BitmapHelper.getVectorAsMapBoxIcon(getContext(), R.drawable.ic_map_pin_a, markerWidth, markerHeight);
                     Icon icon = BitmapHelper.getVectorAsMapBoxIcon(getContext(), R.drawable.maker, markerWidth, markerHeight);
 
                     MarkerOptions markerOptions = new MarkerOptions();
