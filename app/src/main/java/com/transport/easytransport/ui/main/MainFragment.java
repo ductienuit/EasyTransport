@@ -1,5 +1,6 @@
 package com.transport.easytransport.ui.main;
 
+import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
@@ -25,6 +26,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mapbox.mapboxsdk.Mapbox;
@@ -106,6 +108,14 @@ public class MainFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
+            }
+        });
+
+        CardView btnFindway = view.findViewById(R.id.btnFindway);
+        btnFindway.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getContext(), "hello", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -277,4 +287,5 @@ public class MainFragment extends Fragment {
             }
         }
     }
+
 }

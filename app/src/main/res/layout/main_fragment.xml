@@ -83,7 +83,8 @@
         app:cardBackgroundColor="#87c94a"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
-        app:cardCornerRadius="10dp">
+        app:cardCornerRadius="10dp"
+        android:id="@+id/btnFindway">
 
         <RelativeLayout
             android:layout_width="match_parent"
