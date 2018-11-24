@@ -4,4 +4,7 @@
     <string name="depart_taxi">Depart Taxi</string>
     <string name="board_taxi">Board Taxi</string>
     <string name="share_taxi">Share Taxi</string>
+    <string name="currentAdress">Current</string>
+    <string name="arrive_adress">Arrive address</string>
+    <string name="find_way">Find way</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.transport.easytransport.ui.main;
 
+import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
@@ -24,6 +25,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mapbox.mapboxsdk.Mapbox;
@@ -50,7 +53,11 @@ public class MainFragment extends Fragment {
 
     private MapView mMapView;
     private MapboxMap mMap;
+
     private FloatingActionButton mCenterLocationButton;
+
+    private EditText txtCurrent;
+    private EditText txtArrive;
 
     private MarkerOptions mOriginMarkerOptions;
     private Marker mOriginMarker;
@@ -80,10 +87,35 @@ public class MainFragment extends Fragment {
                 if (mOriginMarker != null) {
                     CameraPosition.Builder camPositionBuilder = new CameraPosition.Builder();
                     camPositionBuilder.target(mOriginMarker.getPosition());
-                    camPositionBuilder.zoom(11.0);
+                    camPositionBuilder.zoom(12.0);
 
                     mMap.setCameraPosition(camPositionBuilder.build());
                 }
+            }
+        });
+
+        txtCurrent = view.findViewById(R.id.txtcurrent);
+        txtArrive = view.findViewById(R.id.txtarrive);
+
+        txtCurrent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+        txtArrive.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+        CardView btnFindway = view.findViewById(R.id.btnFindway);
+        btnFindway.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getContext(), "hello", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -158,7 +190,7 @@ public class MainFragment extends Fragment {
 
                 CameraPosition.Builder camPositionBuilder = new CameraPosition.Builder();
                 camPositionBuilder.target(mOriginMarker.getPosition());
-                camPositionBuilder.zoom(11.0);
+                camPositionBuilder.zoom(12.0);
 
                 mMap.setCameraPosition(camPositionBuilder.build());
             }
@@ -255,4 +287,5 @@ public class MainFragment extends Fragment {
             }
         }
     }
+
 }
