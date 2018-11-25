@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/planitemID"
+    >
+    <ImageView
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:id="@+id/item1"
+        android:visibility="gone"
+        android:src="@drawable/ic_directions_walk" />
+    <ImageView
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:id="@+id/item2"
+        android:visibility="gone"
+        android:src="@drawable/ic_directions_bus"/>
+    <ImageView
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:id="@+id/item3"
+        android:visibility="gone"
+        android:src="@drawable/ic_directions_bus" />
+    <ImageView
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:id="@+id/item4"
+        android:visibility="gone"
+        android:src="@drawable/ic_directions_bus" />
+    <ImageView
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:id="@+id/item5"
+        android:visibility="gone"
+        android:src="@drawable/ic_directions_bus" />
+    <ImageView
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:id="@+id/item6"
+        android:visibility="gone"
+        android:src="@drawable/ic_directions_bus" />
+    <ImageView
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:id="@+id/item7"
+        android:visibility="gone"
+        android:src="@drawable/ic_directions_walk" />
+</LinearLayout>
