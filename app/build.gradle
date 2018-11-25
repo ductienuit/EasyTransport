@@ -41,4 +41,8 @@ dependencies {
     implementation "com.android.support:support-core-utils:28.0.0"
 
     implementation 'com.github.yalantis:jellytoolbar:v1.0'
+
+    //implementation 'com.github.vipulasri:timelineview:1.0.5'
+    //implementation 'com.github.alorma:timelineview:2.3.0'
+    implementation 'com.github.qapqap:TimelineView:v1.6'
 }

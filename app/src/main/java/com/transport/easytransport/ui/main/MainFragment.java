@@ -51,6 +51,7 @@ import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.transport.easytransport.BitmapHelper;
 import com.transport.easytransport.MapboxHelper;
 import com.transport.easytransport.R;
+import com.transport.easytransport.ui.TimelineActivity;
 import com.transport.easytransport.ui.WaysActivity;
 
 import java.nio.file.WatchService;
@@ -237,7 +238,7 @@ public class MainFragment extends Fragment {
                     bundle.putDouble("long2", mDestinationMarker.getPosition().getLongitude());
                     bundle.putString("name2",mDestinationMarker.getTitle());
 
-                    Intent intent = new Intent(getActivity(), WaysActivity.class);
+                    Intent intent = new Intent(getActivity(), TimelineActivity.class);
                     intent.putExtra("coordinate", bundle);
                     startActivity(intent);
                 } else {
@@ -250,7 +251,7 @@ public class MainFragment extends Fragment {
                     bundle.putDouble("long2", mDestinationMarker.getPosition().getLongitude());
                     bundle.putString("name2",mDestinationMarker.getTitle());
 
-                    Intent intent = new Intent(getActivity(), WaysActivity.class);
+                    Intent intent = new Intent(getActivity(), TimelineActivity.class);
                     intent.putExtra("coordinate", bundle);
                     startActivity(intent);
                 }
