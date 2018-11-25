@@ -202,10 +202,14 @@ public class MainFragment extends Fragment {
                     mDestinationMarkerOptions = markerOptions;
 
 
+
+
+
                 } else {
                     mDestinationMarker.setPosition(new LatLng(place.getLatLng().latitude,place.getLatLng().longitude));
                     mDestinationMarkerOptions.setPosition(new LatLng(place.getLatLng().latitude,place.getLatLng().longitude));
                 }
+                mViewModel.setEndLocation(mDestinationMarker.getPosition());
             }
 
             @Override
@@ -268,7 +272,6 @@ public class MainFragment extends Fragment {
 
         mMapView.onStart();
 
-        
     }
 
     @Override
@@ -374,6 +377,9 @@ public class MainFragment extends Fragment {
                 mMap.addMarker(mDestinationMarkerOptions);
             }
         });
+        if(mDestinationMarker!=null){
+            mViewModel.setEndLocation(mDestinationMarker.getPosition());
+        }
     }
 
     @Override

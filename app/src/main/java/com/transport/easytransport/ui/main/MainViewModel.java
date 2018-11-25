@@ -96,8 +96,8 @@ public final class MainViewModel extends ViewModel {
 
                 double startLongitude = mStartLocationLiveData.getValue().getLongitude();
                 double startLatitude = mStartLocationLiveData.getValue().getLatitude();
-                double endLongitude = mEndLocationLiveData.getValue().getLongitude();
-                double endLatitude = mEndLocationLiveData.getValue().getLatitude();
+                double endLongitude = location.getLongitude();
+                double endLatitude = location.getLatitude();
 
                 // Let's restrict our Journey call to only some Modes.
                 List<String> onlyModes = new ArrayList<>();
