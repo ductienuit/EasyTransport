@@ -34,6 +34,8 @@ public final class MainViewModel extends ViewModel {
 
     private boolean startLocationSet;
 
+    private TransportApiClient tapiClient = null;
+
     private MutableLiveData<Location> mStartLocationLiveData = new MutableLiveData<>();
 
     private MutableLiveData<LatLng> mEndLocationLiveData = new MutableLiveData<>();
@@ -42,30 +44,44 @@ public final class MainViewModel extends ViewModel {
     private LocationService.LocationListener mLocationListener;
 
     @Nullable
-    private MutableLiveData<android.location.Location> mLocationLiveData;
+    private MutableLiveData<Location> mLocationLiveData;
 
     private MutableLiveData<List<Itinerary>> mItinerariesLiveData = new MutableLiveData<>();
 
+    private MutableLiveData<List<Stop>> mStopsLiveData = new MutableLiveData<>();
+
     public LiveData<Location> getLocation(Context context) {
+        String clientId = SDKApplication.getContext().getString(R.string.transportApiClientId);
+        String clientSecret = SDKApplication.getContext().getString(R.string.transportApiClientSecret);
+
+        tapiClient = new TransportApiClient(new TransportApiClientSettings(clientId, clientSecret));
+
         if (context == null) {
             throw new IllegalArgumentException("Context can't be null.");
         }
 
         if (mLocationLiveData == null) {
             mLocationLiveData = new MutableLiveData<>();
-            mLocationListener = new LocationService.LocationListener() {
-                @Override
-                public void onLocationChanged(Location location) {
-                    mLocationLiveData.postValue(location);
+            mLocationListener = location -> {
+                mLocationLiveData.postValue(location);
 
-                    if (!startLocationSet) {
-                        startLocationSet = true;
-                        mStartLocationLiveData.postValue(location);
-                    }
+                if (!startLocationSet) {
+                    startLocationSet = true;
+                    mStartLocationLiveData.postValue(location);
                 }
             };
             LocationService.getInstance().addLocationListener(mLocationListener);
             LocationService.getInstance().startLocationUpdates(context);
+        }
+        else {
+            mExecutor.execute(() -> {
+                StopQueryOptions stopQuery = StopQueryOptions.defaultQueryOptions();
+                TransportApiResult<List<Stop>> stopResult = tapiClient.getStopsNearby(stopQuery,
+                        mLocationLiveData.getValue().getLatitude(),
+                        mLocationLiveData.getValue().getLongitude(),
+                        300);
+                mStopsLiveData.postValue(stopResult.data);
+            });
         }
 
         return mLocationLiveData;
@@ -86,58 +102,50 @@ public final class MainViewModel extends ViewModel {
     public void setEndLocation(LatLng location) {
         mEndLocationLiveData.postValue(location);
 
-        mExecutor.execute(new Runnable() {
-            @Override
-            public void run() {
-                String clientId = SDKApplication.getContext().getString(R.string.transportApiClientId);
-                String clientSecret = SDKApplication.getContext().getString(R.string.transportApiClientSecret);
+        mExecutor.execute(() -> {
+            double startLongitude = mStartLocationLiveData.getValue().getLongitude();
+            double startLatitude = mStartLocationLiveData.getValue().getLatitude();
+            double endLongitude = mEndLocationLiveData.getValue().getLongitude();
+            double endLatitude = mEndLocationLiveData.getValue().getLatitude();
 
-                TransportApiClient tapiClient = new TransportApiClient(new TransportApiClientSettings(clientId, clientSecret));
+            // Let's restrict our Journey call to only some Modes.
+            List<String> onlyModes = new ArrayList<>();
+            //onlyModes.add("ShareTaxi");
+            onlyModes.add("Bus");
+            //onlyModes.add("Rail");
+            // onlyModes.add("Ferry");
+            // onlyModes.add("Coach");
+            // onlyModes.add("Subway");
+            // onlyModes.add("Rail");
 
-                double startLongitude = mStartLocationLiveData.getValue().getLongitude();
-                double startLatitude = mStartLocationLiveData.getValue().getLatitude();
-                double endLongitude = mEndLocationLiveData.getValue().getLongitude();
-                double endLatitude = mEndLocationLiveData.getValue().getLatitude();
+            // Request only one Itinerary for now.
+            int numItineraries = 5;
 
-                // Let's restrict our Journey call to only some Modes.
-                List<String> onlyModes = new ArrayList<>();
-                //onlyModes.add("ShareTaxi");
-                onlyModes.add("Bus");
-                //onlyModes.add("Rail");
-                // onlyModes.add("Ferry");
-                // onlyModes.add("Coach");
-                // onlyModes.add("Subway");
-                // onlyModes.add("Rail");
+            JourneyBodyOptions journeyBodyOptions = new JourneyBodyOptions(
+                    null,
+                    null,
+                    onlyModes,  // Đường đi bằng gì
+                    null,
+                    numItineraries, //Số đường chỉ dẫn ra
+                    null);
 
-                // Request only one Itinerary for now.
-                int numItineraries = 5;
-
-                JourneyBodyOptions journeyBodyOptions = new JourneyBodyOptions(
-                        null,
-                        null,
-                        onlyModes,  // Đường đi bằng gì
-                        null,
-                        numItineraries, //Số đường chỉ dẫn ra
-                        null);
-
-                TransportApiResult<Journey> journeyResult = tapiClient.postJourney(
-                        journeyBodyOptions,
-                        startLatitude,
-                        startLongitude,
-                        endLatitude,
-                        endLongitude,
-                        null);
+            TransportApiResult<Journey> journeyResult = tapiClient.postJourney(
+                    journeyBodyOptions,
+                    startLatitude,
+                    startLongitude,
+                    endLatitude,
+                    endLongitude,
+                    null);
 
 
-                ///STOPS REQUEST
-//                StopQueryOptions stopQuery = StopQueryOptions.defaultQueryOptions();
-//                TransportApiResult<List<Stop>> getStopsNearby = tapiClient.getStopsNearby(stopQuery,10.752070,106.663795,100);
+            ///STOPS REQUEST
+
 //                Log.i("HRLLLLLLL", "ádjlk");
 
-                List<Itinerary> itineraries = journeyResult.data.getItineraries();
 
-                mItinerariesLiveData.postValue(itineraries);
-            }
+            List<Itinerary> itineraries = journeyResult.data.getItineraries();
+
+            mItinerariesLiveData.postValue(itineraries);
         });
     }
 
@@ -147,6 +155,10 @@ public final class MainViewModel extends ViewModel {
 
     public LiveData<List<Itinerary>> getItineraries() {
         return mItinerariesLiveData;
+    }
+
+    public LiveData<List<Stop>> getStops() {
+        return mStopsLiveData;
     }
 
     @Override

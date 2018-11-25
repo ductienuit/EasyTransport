@@ -12,6 +12,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
@@ -19,7 +20,9 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import transportapisdk.TransportApiResult;
 import transportapisdk.models.Itinerary;
+import transportapisdk.models.Stop;
 
 import android.os.Vibrator;
 import android.provider.Settings;
@@ -43,6 +46,7 @@ import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.annotations.Icon;
 import com.mapbox.mapboxsdk.annotations.Marker;
 import com.mapbox.mapboxsdk.annotations.MarkerOptions;
+import com.mapbox.mapboxsdk.annotations.PolylineOptions;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapView;
@@ -54,10 +58,13 @@ import com.transport.easytransport.R;
 import com.transport.easytransport.ui.WaysActivity;
 
 import java.nio.file.WatchService;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 import static androidx.constraintlayout.motion.widget.MotionScene.TAG;
+import static java.lang.Math.cos;
+import static java.lang.Math.sin;
 
 public class MainFragment extends Fragment {
     private static final String LOG_TAG = "MainFragment";
@@ -126,24 +133,21 @@ public class MainFragment extends Fragment {
         txtCurrent.setHint("Current location");
         ImageView searchCurrentIcon = (ImageView)((LinearLayout) Objects.requireNonNull(txtCurrent.getView())).getChildAt(0);
         searchCurrentIcon.setImageDrawable(getResources().getDrawable(R.drawable.ic_my_location_black_24dp));
-        searchCurrentIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mOriginMarker != null) {
-                        setupViewModelConnections();
+        searchCurrentIcon.setOnClickListener(view1 -> {
+            if (mOriginMarker != null) {
+                    setupViewModelConnections();
 
-                        CameraPosition.Builder camPositionBuilder = new CameraPosition.Builder();
-                        camPositionBuilder.target(mOriginMarker.getPosition());
-                        camPositionBuilder.zoom(14.0);
+                    CameraPosition.Builder camPositionBuilder = new CameraPosition.Builder();
+                    camPositionBuilder.target(mOriginMarker.getPosition());
+                    camPositionBuilder.zoom(14.0);
 
-                        mMap.setCameraPosition(camPositionBuilder.build());
+                    mMap.setCameraPosition(camPositionBuilder.build());
 
-                        txtCurrent.setText("");
+                    txtCurrent.setText("");
 
-                        mMap.clear();
+                    mMap.clear();
 
-                        mStartMarker=null;
-                }
+                    mStartMarker=null;
             }
         });
 
@@ -296,14 +300,15 @@ public class MainFragment extends Fragment {
         }
     }
 
+
+
     // Observe LiveData from the MainViewModel.
     private void setupViewModelConnections() {
-        mViewModel.getLocation(getContext()).observe(this, new Observer<Location>() {
-            @Override
-            public void onChanged(Location location) {
-                Log.i(LOG_TAG, "Location update!");
-
-            }
+        mViewModel.getLocation(getContext()).observe(this, location -> {
+            Log.i(LOG_TAG, "Location update!");
+            mMap.clear();
+            MapboxHelper.drawCircle(mMap, new LatLng(location.getLatitude(), location.getLongitude()),
+                    getContext().getResources().getColor(R.color.colorCircleLocation), 300);
         });
 
         mViewModel.getStartLocation().observe(this, new Observer<Location>() {
@@ -368,15 +373,16 @@ public class MainFragment extends Fragment {
             mViewModel.setEndLocation(point);
         });
 
-        mViewModel.getItineraries().observe(this, new Observer<List<Itinerary>>() {
+        mViewModel.getItineraries().observe(this, itineraries -> {
+            mMap.clear();
+            MapboxHelper.drawItineraryOnMap(getContext(), mMap, itineraries.get(0));
+            mMap.addMarker(mOriginMarkerOptions);
+            mMap.addMarker(mDestinationMarkerOptions);
+        });
 
-            @Override
-            public void onChanged(List<Itinerary> itineraries) {
-                mMap.clear();
-                MapboxHelper.drawItineraryOnMap(getContext(), mMap, itineraries.get(0));
-                mMap.addMarker(mOriginMarkerOptions);
-                mMap.addMarker(mDestinationMarkerOptions);
-            }
+        mViewModel.getStops().observe(this, stops -> {
+            mMap.clear();
+            MapboxHelper.drawBusMarkers(getContext(), mMap, stops);
         });
     }
 

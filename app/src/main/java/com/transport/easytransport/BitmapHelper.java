@@ -2,6 +2,7 @@ package com.transport.easytransport;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -41,6 +42,12 @@ public final class BitmapHelper {
         IconFactory iconFactory = IconFactory.getInstance(context);
         Bitmap bitmap = BitmapHelper.getVectorAsBitmap(context, vectorDrawableId, widthPixels, heightPixels);
         return iconFactory.fromBitmap(bitmap);
+    }
+
+    public static Icon getIconFromBitmap(Context context, int drawableId) {
+        IconFactory icon = IconFactory.getInstance(context);
+        Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), drawableId);
+        return icon.fromBitmap(bitmap);
     }
 
     public static Bitmap getVectorAsBitmap(Context context, int vectorDrawableId, int widthPixels, int heightPixels, @ColorInt int packedIntColour) {
