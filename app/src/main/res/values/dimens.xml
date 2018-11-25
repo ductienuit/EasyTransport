@@ -10,6 +10,8 @@
     <dimen name="waypoint_end_map_marker_width">48dp</dimen>
     <dimen name="waypoint_user_map_marker_height">48dp</dimen>
     <dimen name="waypoint_user_map_marker_width">48dp</dimen>
+    <dimen name="waypoint_user_location_marker_height">20dp</dimen>
+    <dimen name="waypoint_user_location_marker_width">20dp</dimen>
 
     <!-- Width of the line drawn on the map (itineraries/steps). -->
     <dimen name="waypoint_map_line_width">1.5dp</dimen>
